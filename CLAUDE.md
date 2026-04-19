@@ -54,7 +54,9 @@ Set this in a `.env` file at the project root.
 ├── utils/
 │   ├── helpers.ts              ← Pure helper/utility functions
 │   ├── callbacks.ts            ← Reusable callback functions
-│   └── constants.ts            ← App-wide constants (colors, dimensions, etc.)
+│   ├── constants.ts            ← App-wide constants (colors, dimensions, etc.)
+│   ├── types.ts                ← All TypeScript type declarations
+│   └── interfaces.ts           ← All TypeScript interface declarations
 ├── store/                      ← Zustand stores
 ├── assets/                     ← Images, fonts, icons
 ├── .env                        ← Environment variables (not committed)
@@ -67,31 +69,55 @@ Set this in a `.env` file at the project root.
 
 ## Screens
 
-| # | File | Description |
-|---|------|-------------|
-| 01 | `screens/Welcome.tsx` | Entry screen — username input, create or join room options |
-| 02 | `screens/CreateRoom.tsx` | Host sets minimum capacity (3–10) and game settings |
-| 03 | `screens/HostLobby.tsx` | Host waits for players; sees player list; can start game once min capacity met |
-| 04 | `screens/GuestLobby.tsx` | Guest enters room ID, waits for host to start |
-| 05 | `screens/AskPhase.tsx` | Current round's asker submits a question (30s default) |
-| 06 | `screens/AnswerPhase.tsx` | All other players submit answers (30s default) |
-| 07 | `screens/MatchingPhase.tsx` | Each player drags/assigns shuffled answers to participant names |
-| 08 | `screens/RoundLeaderboard.tsx` | Scores revealed after each round; shows correct matches |
-| 09 | `screens/FinalResults.tsx` | Final leaderboard after all rounds complete |
+| #   | File                           | Description                                                                    |
+| --- | ------------------------------ | ------------------------------------------------------------------------------ |
+| 01  | `screens/Welcome.tsx`          | Entry screen — username input, create or join room options                     |
+| 02  | `screens/CreateRoom.tsx`       | Host sets minimum capacity (3–10) and game settings                            |
+| 03  | `screens/HostLobby.tsx`        | Host waits for players; sees player list; can start game once min capacity met |
+| 04  | `screens/GuestLobby.tsx`       | Guest enters room ID, waits for host to start                                  |
+| 05  | `screens/AskPhase.tsx`         | Current round's asker submits a question (30s default)                         |
+| 06  | `screens/AnswerPhase.tsx`      | All other players submit answers (30s default)                                 |
+| 07  | `screens/MatchingPhase.tsx`    | Each player drags/assigns shuffled answers to participant names                |
+| 08  | `screens/RoundLeaderboard.tsx` | Scores revealed after each round; shows correct matches                        |
+| 09  | `screens/FinalResults.tsx`     | Final leaderboard after all rounds complete                                    |
+
+---
+
+## Responsiveness
+
+The app should look good in all mobile devices. Styling of app should be adjusted accordingly.
 
 ---
 
 ## File & Naming Conventions
 
-| Type | Convention | Location |
-|------|-----------|----------|
-| Screens | `PascalCase.tsx` | `/screens` |
-| Components | `PascalCase.tsx` | `/components` |
-| Hooks | `useCamelCase.ts` | `/hooks` |
-| Helper functions | named exports | `/utils/helpers.ts` |
-| Callback functions | named exports | `/utils/callbacks.ts` |
-| Constants | named exports (UPPER_SNAKE or camelCase) | `/utils/constants.ts` |
-| Zustand stores | `useCamelCaseStore.ts` | `/store` |
+| Type               | Convention                               | Location                  |
+| ------------------ | ---------------------------------------- | ------------------------- |
+| Screens            | `PascalCase.tsx`                         | `/screens`                |
+| Components         | `PascalCase.tsx`                         | `/components`             |
+| Hooks              | `useCamelCase.ts`                        | `/hooks`                  |
+| Helper functions   | named exports                            | `/utils/helpers.ts`       |
+| Callback functions | named exports                            | `/utils/callbacks.ts`     |
+| Constants          | named exports (UPPER_SNAKE or camelCase) | `/utils/constants.ts`     |
+| Type declarations  | named exports (`type`)                   | `/utils/types.ts`         |
+| Interfaces         | named exports (`interface`)              | `/utils/interfaces.ts`    |
+| Zustand stores     | `useCamelCaseStore.ts`                   | `/store`                  |
+
+### Import Rules
+
+Always use the `@/` alias when importing from project modules:
+
+```ts
+import … from '@/utils/helpers'
+import … from '@/utils/interfaces'
+import … from '@/utils/callbacks'
+import … from '@/utils/types'
+import … from '@/utils/constants'
+import … from '@/screens'
+import … from '@/store'
+import … from '@/components'
+import … from '@/hooks'
+```
 
 ---
 
@@ -106,26 +132,28 @@ Set this in a `.env` file at the project root.
 ## Socket Events
 
 ### Client → Server
-| Event | Payload |
-|-------|---------|
-| `create_room` | `{ username, minCapacity }` |
-| `join_room` | `{ roomId, username }` |
-| `start_game` | `{ roomId, settings }` |
-| `submit_question` | `{ roomId, question }` |
-| `submit_answer` | `{ roomId, answer }` |
-| `submit_matches` | `{ roomId, matches: { answerId: playerId } }` |
+
+| Event             | Payload                                       |
+| ----------------- | --------------------------------------------- |
+| `create_room`     | `{ username, minCapacity }`                   |
+| `join_room`       | `{ roomId, username }`                        |
+| `start_game`      | `{ roomId, settings }`                        |
+| `submit_question` | `{ roomId, question }`                        |
+| `submit_answer`   | `{ roomId, answer }`                          |
+| `submit_matches`  | `{ roomId, matches: { answerId: playerId } }` |
 
 ### Server → Client
-| Event | Payload |
-|-------|---------|
-| `room_created` | `{ roomId, hostId }` |
-| `player_joined` | `{ players[] }` |
-| `player_left` | `{ players[] }` |
-| `game_started` | `{ settings, rounds }` |
-| `phase_changed` | `{ phase, timeLeft, roundNumber, askerIndex }` |
+
+| Event               | Payload                                            |
+| ------------------- | -------------------------------------------------- |
+| `room_created`      | `{ roomId, hostId }`                               |
+| `player_joined`     | `{ players[] }`                                    |
+| `player_left`       | `{ players[] }`                                    |
+| `game_started`      | `{ settings, rounds }`                             |
+| `phase_changed`     | `{ phase, timeLeft, roundNumber, askerIndex }`     |
 | `answers_collected` | `{ answers: [{ id, text }] }` — shuffled, no names |
-| `round_results` | `{ correctMatches, scores }` |
-| `game_over` | `{ finalScores }` |
+| `round_results`     | `{ correctMatches, scores }`                       |
+| `game_over`         | `{ finalScores }`                                  |
 
 ---
 
