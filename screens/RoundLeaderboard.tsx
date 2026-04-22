@@ -6,10 +6,10 @@ import { COLORS } from '@/utils/constants'
 import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
+import Text from '@/components/Text'
 import {
 	ScrollView,
 	StyleSheet,
-	Text,
 	View
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

@@ -8,10 +8,10 @@ import { COLORS, DURATION_OPTIONS, MAX_CAPACITY, MIN_CAPACITY, ROUND_OPTIONS } f
 import { generateRoomId } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
+import Text from '@/components/Text'
 import {
 	ScrollView,
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native'

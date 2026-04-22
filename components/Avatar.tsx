@@ -1,6 +1,7 @@
 import { getInitial } from '@/utils/helpers'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import Text from '@/components/Text'
+import { StyleSheet, View } from 'react-native'
 
 type Props = {
     name: string

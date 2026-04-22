@@ -8,9 +8,9 @@ import { COLORS } from '@/utils/constants'
 import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import Text from '@/components/Text'
 import {
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native'

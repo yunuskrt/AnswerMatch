@@ -7,10 +7,10 @@ import { emitJoinRoom } from '@/utils/callbacks'
 import { COLORS } from '@/utils/constants'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import Text from '@/components/Text'
 import {
 	ScrollView,
 	StyleSheet,
-	Text,
 	TextInput,
 	View
 } from 'react-native'

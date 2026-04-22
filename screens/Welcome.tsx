@@ -4,10 +4,10 @@ import { useUserStore } from '@/store/useUserStore'
 import { COLORS } from '@/utils/constants'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
+import Text from '@/components/Text'
 import {
 	ScrollView,
 	StyleSheet,
-	Text,
 	TextInput,
 	View
 } from 'react-native'
@@ -41,7 +41,6 @@ const Welcome = ({}: Props) => {
 			>
 				{/* Logo */}
 				<View style={styles.logoContainer}>
-					<View style={styles.logoShadow} />
 					<View style={styles.logoBox}>
 						<Text style={styles.logoEmoji}>🎭</Text>
 					</View>
@@ -117,15 +116,6 @@ const styles = StyleSheet.create({
 		marginTop: 32,
 		alignItems: 'center',
 		gap: 8,
-	},
-	logoShadow: {
-		position: 'absolute',
-		top: 5,
-		left: 5,
-		width: 80,
-		height: 80,
-		borderRadius: 20,
-		backgroundColor: COLORS.border,
 	},
 	logoBox: {
 		width: 80,

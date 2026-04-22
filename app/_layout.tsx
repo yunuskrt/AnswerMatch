@@ -1,8 +1,21 @@
+import { useFonts, Caveat_400Regular, Caveat_700Bold } from '@expo-google-fonts/caveat';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
+SplashScreen.preventAutoHideAsync();
+
 type Props = {}
-const RootLayout =({}: Props) => {
+const RootLayout = ({}: Props) => {
+  const [fontsLoaded] = useFonts({ Caveat_400Regular, Caveat_700Bold });
+
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
+
   return (
     <>
       <StatusBar style="dark" />
@@ -10,7 +23,7 @@ const RootLayout =({}: Props) => {
         screenOptions={{
           headerStyle: { backgroundColor: '#fafaf8' },
           headerTintColor: '#1a1a1a',
-          headerTitleStyle: { fontWeight: '700' },
+          headerTitleStyle: { fontFamily: 'Caveat_700Bold', fontWeight: '700' },
           contentStyle: { backgroundColor: '#fafaf8' },
           animation: 'slide_from_right',
         }}
