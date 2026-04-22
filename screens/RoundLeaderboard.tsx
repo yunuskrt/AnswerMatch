@@ -1,3 +1,4 @@
+import NeoButton from '@/components/NeoButton'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
@@ -6,15 +7,15 @@ import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import {
-	SafeAreaView,
 	ScrollView,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
-	View,
+	View
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-export default function RoundLeaderboard() {
+type Props = {}
+const RoundLeaderboard = ({}: Props) => {
 	const router = useRouter()
 	const socket = useSocket()
 	const { players } = useRoomStore()
@@ -155,28 +156,7 @@ export default function RoundLeaderboard() {
 	)
 }
 
-function NeoButton({
-	label,
-	bg,
-	onPress,
-}: {
-	label: string
-	bg: string
-	onPress: () => void
-}) {
-	return (
-		<View style={btnStyles.wrapper}>
-			<View style={[btnStyles.shadow, { backgroundColor: COLORS.border }]} />
-			<TouchableOpacity
-				style={[btnStyles.btn, { backgroundColor: bg }]}
-				onPress={onPress}
-				activeOpacity={0.85}
-			>
-				<Text style={btnStyles.label}>{label}</Text>
-			</TouchableOpacity>
-		</View>
-	)
-}
+export default RoundLeaderboard
 
 const styles = StyleSheet.create({
 	safe: { flex: 1, backgroundColor: COLORS.bg },
@@ -255,29 +235,4 @@ const styles = StyleSheet.create({
 		textAlign: 'right',
 	},
 	footer: { marginTop: 'auto' as any },
-})
-
-const btnStyles = StyleSheet.create({
-	wrapper: { position: 'relative', height: 52 },
-	shadow: {
-		position: 'absolute',
-		top: 4,
-		left: 4,
-		right: -4,
-		bottom: -4,
-		borderRadius: 10,
-	},
-	btn: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		borderRadius: 10,
-		borderWidth: 2,
-		borderColor: COLORS.border,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	label: { fontSize: 18, fontWeight: '700', color: COLORS.white },
 })

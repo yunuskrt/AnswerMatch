@@ -38,3 +38,6 @@ export const ASYNC_STORAGE_KEYS = {
   USER_PROFILE: '@user:profile',
   GAME_HISTORY: '@user:gameHistory',
 };
+
+export const DURATION_OPTIONS = [15, 30, 60];
+export const ROUND_OPTIONS = [5, 10, 15];

@@ -1,7 +1,8 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-export default function RootLayout() {
+type Props = {}
+const RootLayout =({}: Props) => {
   return (
     <>
       <StatusBar style="dark" />
@@ -27,3 +28,4 @@ export default function RootLayout() {
     </>
   );
 }
+export default RootLayout;

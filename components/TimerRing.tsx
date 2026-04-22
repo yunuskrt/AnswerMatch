@@ -3,12 +3,13 @@ import { TimerRingProps } from '@/utils/interfaces'
 import React from 'react'
 import Svg, { Circle, Text as SvgText } from 'react-native-svg'
 
-export default function TimerRing({
+type Props = TimerRingProps
+const TimerRing = ({
 	seconds,
 	totalSeconds = 30,
 	accent = COLORS.accent2,
 	size = 72,
-}: TimerRingProps) {
+}: Props) => {
 	const strokeWidth = 5
 	const radius = size / 2 - strokeWidth
 	const circumference = 2 * Math.PI * radius
@@ -57,3 +58,5 @@ export default function TimerRing({
 		</Svg>
 	)
 }
+
+export default TimerRing

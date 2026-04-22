@@ -1,3 +1,4 @@
+import NeoButton from '@/components/NeoButton'
 import TimerRing from '@/components/TimerRing'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
@@ -8,15 +9,16 @@ import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
-	SafeAreaView,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import Svg, { Line } from 'react-native-svg'
 
-export default function MatchingPhase() {
+type Props = {}
+const MatchingPhase = ({}: Props) => {
 	const router = useRouter()
 	const socket = useSocket()
 	const { roomId, players } = useRoomStore()
@@ -232,28 +234,7 @@ export default function MatchingPhase() {
 	)
 }
 
-function NeoButton({
-	label,
-	bg,
-	onPress,
-}: {
-	label: string
-	bg: string
-	onPress: () => void
-}) {
-	return (
-		<View style={btnStyles.wrapper}>
-			<View style={[btnStyles.shadow, { backgroundColor: COLORS.border }]} />
-			<TouchableOpacity
-				style={[btnStyles.btn, { backgroundColor: bg }]}
-				onPress={onPress}
-				activeOpacity={0.85}
-			>
-				<Text style={btnStyles.label}>{label}</Text>
-			</TouchableOpacity>
-		</View>
-	)
-}
+export default MatchingPhase
 
 const styles = StyleSheet.create({
 	safe: { flex: 1, backgroundColor: COLORS.bg },
@@ -338,29 +319,4 @@ const styles = StyleSheet.create({
 	checkmark: { fontSize: 14 },
 	submitArea: { gap: 6 },
 	matchCount: { fontSize: 13, color: COLORS.gray, textAlign: 'center' },
-})
-
-const btnStyles = StyleSheet.create({
-	wrapper: { position: 'relative', height: 52 },
-	shadow: {
-		position: 'absolute',
-		top: 4,
-		left: 4,
-		right: -4,
-		bottom: -4,
-		borderRadius: 10,
-	},
-	btn: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		borderRadius: 10,
-		borderWidth: 2,
-		borderColor: COLORS.border,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	label: { fontSize: 18, fontWeight: '700', color: COLORS.white },
 })

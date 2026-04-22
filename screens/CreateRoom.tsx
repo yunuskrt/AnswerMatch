@@ -1,22 +1,24 @@
+import Chip from '@/components/Chip'
+import NeoButton from '@/components/NeoButton'
+import SectionLabel from '@/components/SectionLabel'
+import Tag from '@/components/Tag'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
-import { COLORS, MAX_CAPACITY, MIN_CAPACITY } from '@/utils/constants'
+import { COLORS, DURATION_OPTIONS, MAX_CAPACITY, MIN_CAPACITY, ROUND_OPTIONS } from '@/utils/constants'
 import { generateRoomId } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
-	SafeAreaView,
 	ScrollView,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-const DURATION_OPTIONS = [15, 30, 60]
-const ROUND_OPTIONS = [5, 10, 15]
-
-export default function CreateRoom() {
+type Props = {}
+const CreateRoom = ({}: Props) => {
 	const router = useRouter()
 	const { username } = useUserStore()
 	const { settings, setSettings, setRoom } = useRoomStore()
@@ -142,83 +144,7 @@ export default function CreateRoom() {
 	)
 }
 
-function SectionLabel({ text }: { text: string }) {
-	return (
-		<View style={sl.row}>
-			<Text style={sl.text}>{text}</Text>
-			<View style={sl.line} />
-		</View>
-	)
-}
-
-function Chip({
-	label,
-	active,
-	color,
-	onPress,
-}: {
-	label: string
-	active: boolean
-	color: string
-	onPress: () => void
-}) {
-	return (
-		<TouchableOpacity
-			style={[
-				chipStyles.chip,
-				active && { borderColor: COLORS.border, backgroundColor: color + '33' },
-				active && chipStyles.chipShadow,
-			]}
-			onPress={onPress}
-			activeOpacity={0.7}
-		>
-			<Text
-				style={[
-					chipStyles.text,
-					active && { fontWeight: '700', color: COLORS.fg },
-				]}
-			>
-				{label}
-			</Text>
-		</TouchableOpacity>
-	)
-}
-
-function Tag({ label, color }: { label: string; color: string }) {
-	return (
-		<View
-			style={[
-				tagStyles.tag,
-				{ backgroundColor: color + '33', borderColor: color },
-			]}
-		>
-			<Text style={tagStyles.text}>{label}</Text>
-		</View>
-	)
-}
-
-function NeoButton({
-	label,
-	bg,
-	onPress,
-}: {
-	label: string
-	bg: string
-	onPress: () => void
-}) {
-	return (
-		<View style={btnStyles.wrapper}>
-			<View style={[btnStyles.shadow, { backgroundColor: COLORS.border }]} />
-			<TouchableOpacity
-				style={[btnStyles.btn, { backgroundColor: bg }]}
-				onPress={onPress}
-				activeOpacity={0.85}
-			>
-				<Text style={btnStyles.label}>{label}</Text>
-			</TouchableOpacity>
-		</View>
-	)
-}
+export default CreateRoom
 
 const styles = StyleSheet.create({
 	safe: { flex: 1, backgroundColor: COLORS.bg },
@@ -328,71 +254,4 @@ const styles = StyleSheet.create({
 	},
 	tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
 	btnWrapper: { marginTop: 8 },
-})
-
-const sl = StyleSheet.create({
-	row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-	text: {
-		fontSize: 12,
-		color: COLORS.gray,
-		letterSpacing: 1,
-		textTransform: 'uppercase',
-	},
-	line: { flex: 1, height: 1, backgroundColor: COLORS.lightGray },
-})
-
-const chipStyles = StyleSheet.create({
-	chip: {
-		flex: 1,
-		height: 40,
-		borderWidth: 2,
-		borderColor: COLORS.lightGray,
-		borderRadius: 8,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: COLORS.white,
-	},
-	chipShadow: {
-		shadowColor: COLORS.border,
-		shadowOffset: { width: 2, height: 2 },
-		shadowOpacity: 1,
-		shadowRadius: 0,
-		elevation: 2,
-	},
-	text: { fontSize: 16, color: COLORS.gray },
-})
-
-const tagStyles = StyleSheet.create({
-	tag: {
-		paddingHorizontal: 10,
-		paddingVertical: 3,
-		borderRadius: 20,
-		borderWidth: 1.5,
-	},
-	text: { fontSize: 13, color: COLORS.fg },
-})
-
-const btnStyles = StyleSheet.create({
-	wrapper: { position: 'relative', height: 52 },
-	shadow: {
-		position: 'absolute',
-		top: 4,
-		left: 4,
-		right: -4,
-		bottom: -4,
-		borderRadius: 10,
-	},
-	btn: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		borderRadius: 10,
-		borderWidth: 2,
-		borderColor: COLORS.border,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	label: { fontSize: 18, fontWeight: '700', color: COLORS.white },
 })
