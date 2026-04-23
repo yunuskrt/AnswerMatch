@@ -1,17 +1,14 @@
+import Text from '@/components/Text'
 import ToggleNeoButton from '@/components/ToggleNeoButton'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
+import { globalStyles } from '@/styles/global'
 import { COLORS } from '@/utils/constants'
 import { formatPlacement, getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import Text from '@/components/Text'
-import {
-	ScrollView,
-	StyleSheet,
-	View
-} from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {}
@@ -71,13 +68,13 @@ const FinalResults = ({}: Props) => {
 	}
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<ScrollView contentContainerStyle={styles.scroll}>
 				{/* Header */}
 				<View style={styles.header}>
 					<Text style={styles.emoji}>🎉</Text>
-					<Text style={styles.title}>Game Over!</Text>
-					<Text style={styles.subtitle}>
+					<Text style={globalStyles.title}>Game Over!</Text>
+					<Text style={globalStyles.subtitle}>
 						Room #{roomId || '4821'} · {totalRounds || 5} rounds completed
 					</Text>
 				</View>
@@ -192,7 +189,6 @@ const FinalResults = ({}: Props) => {
 export default FinalResults
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
 	scroll: {
 		flexGrow: 1,
 		paddingHorizontal: 24,
@@ -202,8 +198,6 @@ const styles = StyleSheet.create({
 	},
 	header: { alignItems: 'center', gap: 4 },
 	emoji: { fontSize: 36 },
-	title: { fontSize: 30, fontWeight: '700', color: COLORS.fg },
-	subtitle: { fontSize: 14, color: COLORS.gray },
 	podium: {
 		flexDirection: 'row',
 		justifyContent: 'center',

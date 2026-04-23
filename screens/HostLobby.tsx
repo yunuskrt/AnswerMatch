@@ -6,6 +6,7 @@ import Text from '@/components/Text'
 import { useSocket } from '@/hooks/useSocket'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
+import { globalStyles } from '@/styles/global'
 import { emitStartGame } from '@/utils/callbacks'
 import { COLORS } from '@/utils/constants'
 import { getPlayerColor } from '@/utils/helpers'
@@ -51,12 +52,12 @@ const HostLobby = ({}: Props) => {
 	const displayPlayers = players.length > 0 ? players : [{ id: '1', username }]
 
 	return (
-		<SafeAreaView style={styles.safe}>
-			<ScrollView contentContainerStyle={styles.scroll}>
+		<SafeAreaView style={globalStyles.safe}>
+			<ScrollView contentContainerStyle={globalStyles.scroll}>
 				{/* Header */}
 				<View style={styles.headerRow}>
 					<View>
-						<Text style={styles.title}>Waiting Room</Text>
+						<Text style={globalStyles.title}>Waiting Room</Text>
 						<View style={styles.roomIdRow}>
 							<Text style={styles.roomIdLabel}>Room ID:</Text>
 							<Text style={styles.roomId}>#{roomId}</Text>
@@ -118,20 +119,11 @@ const HostLobby = ({}: Props) => {
 export default HostLobby
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
-	scroll: {
-		flexGrow: 1,
-		paddingHorizontal: 24,
-		paddingTop: 16,
-		paddingBottom: 40,
-		gap: 16,
-	},
 	headerRow: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'flex-start',
 	},
-	title: { fontSize: 26, fontWeight: '700', color: COLORS.fg },
 	roomIdRow: {
 		flexDirection: 'row',
 		alignItems: 'center',

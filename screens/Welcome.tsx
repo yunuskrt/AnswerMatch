@@ -3,16 +3,11 @@ import NeoButton from '@/components/NeoButton'
 import SectionLabel from '@/components/SectionLabel'
 import Text from '@/components/Text'
 import { useUserStore } from '@/store/useUserStore'
+import { globalStyles } from '@/styles/global'
 import { COLORS } from '@/utils/constants'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import {
-	Alert,
-	ScrollView,
-	StyleSheet,
-	TextInput,
-	View
-} from 'react-native'
+import { Alert, ScrollView, StyleSheet, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {}
@@ -42,7 +37,7 @@ const Welcome = ({}: Props) => {
 	}
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<ScrollView
 				contentContainerStyle={styles.scroll}
 				keyboardShouldPersistTaps='handled'
@@ -85,9 +80,7 @@ const Welcome = ({}: Props) => {
 				</View>
 
 				{/* Recent games — independently scrollable */}
-				{gameHistory.length > 0 && (
-					<GameHistory records={gameHistory} />
-				)}
+				{gameHistory.length > 0 && <GameHistory records={gameHistory} />}
 			</ScrollView>
 		</SafeAreaView>
 	)
@@ -96,7 +89,6 @@ const Welcome = ({}: Props) => {
 export default Welcome
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
 	scroll: {
 		flexGrow: 1,
 		paddingHorizontal: 24,

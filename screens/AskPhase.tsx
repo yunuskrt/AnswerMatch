@@ -1,21 +1,22 @@
 import NeoButton from '@/components/NeoButton'
 import SectionLabel from '@/components/SectionLabel'
+import Text from '@/components/Text'
 import TimerRing from '@/components/TimerRing'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
+import { globalStyles } from '@/styles/global'
 import { emitSubmitQuestion } from '@/utils/callbacks'
 import { COLORS } from '@/utils/constants'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import Text from '@/components/Text'
 import {
 	KeyboardAvoidingView,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	TextInput,
-	View
+	View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -63,13 +64,13 @@ const AskPhase = ({}: Props) => {
 	}
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
 			>
 				<ScrollView
-					contentContainerStyle={styles.scroll}
+					contentContainerStyle={globalStyles.scroll}
 					keyboardShouldPersistTaps='handled'
 				>
 					{/* Round header */}
@@ -126,14 +127,6 @@ const AskPhase = ({}: Props) => {
 export default AskPhase
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
-	scroll: {
-		flexGrow: 1,
-		paddingHorizontal: 24,
-		paddingTop: 12,
-		paddingBottom: 40,
-		gap: 16,
-	},
 	roundBadge: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

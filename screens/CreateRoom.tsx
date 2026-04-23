@@ -5,7 +5,13 @@ import SectionLabel from '@/components/SectionLabel'
 import Text from '@/components/Text'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
-import { COLORS, DURATION_OPTIONS, MAX_CAPACITY, MIN_CAPACITY } from '@/utils/constants'
+import { globalStyles } from '@/styles/global'
+import {
+	COLORS,
+	DURATION_OPTIONS,
+	MAX_CAPACITY,
+	MIN_CAPACITY,
+} from '@/utils/constants'
 import { generateRoomId } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -102,14 +108,16 @@ const CreateRoom = ({}: Props) => {
 			: 0
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<ScrollView
 				contentContainerStyle={styles.scroll}
 				keyboardShouldPersistTaps='handled'
 			>
 				<View style={styles.header}>
-					<Text style={styles.title}>Create Room</Text>
-					<Text style={styles.subtitle}>Configure your game settings</Text>
+					<Text style={globalStyles.title}>Create Room</Text>
+					<Text style={globalStyles.subtitle}>
+						Configure your game settings
+					</Text>
 				</View>
 
 				{/* Min Capacity */}
@@ -204,7 +212,6 @@ const CreateRoom = ({}: Props) => {
 export default CreateRoom
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
 	scroll: {
 		flexGrow: 1,
 		paddingHorizontal: 24,
@@ -213,8 +220,6 @@ const styles = StyleSheet.create({
 		gap: 20,
 	},
 	header: { gap: 4 },
-	title: { fontSize: 26, fontWeight: '700', color: COLORS.fg },
-	subtitle: { fontSize: 14, color: COLORS.gray },
 	section: { gap: 10 },
 	sliderRow: {
 		flexDirection: 'row',

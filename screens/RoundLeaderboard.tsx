@@ -1,17 +1,14 @@
 import NeoButton from '@/components/NeoButton'
+import Text from '@/components/Text'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
+import { globalStyles } from '@/styles/global'
 import { COLORS } from '@/utils/constants'
 import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import Text from '@/components/Text'
-import {
-	ScrollView,
-	StyleSheet,
-	View
-} from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {}
@@ -78,12 +75,12 @@ const RoundLeaderboard = ({}: Props) => {
 	}
 
 	return (
-		<SafeAreaView style={styles.safe}>
-			<ScrollView contentContainerStyle={styles.scroll}>
+		<SafeAreaView style={globalStyles.safe}>
+			<ScrollView contentContainerStyle={globalStyles.scroll}>
 				{/* Title */}
 				<View style={styles.titleArea}>
-					<Text style={styles.title}>Round {roundNumber} Results</Text>
-					<Text style={styles.subtitle}>
+					<Text style={globalStyles.title}>Round {roundNumber} Results</Text>
+					<Text style={globalStyles.subtitle}>
 						{totalRounds} rounds total ·{' '}
 						{Math.max(0, totalRounds - roundNumber)} remaining
 					</Text>
@@ -159,17 +156,7 @@ const RoundLeaderboard = ({}: Props) => {
 export default RoundLeaderboard
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
-	scroll: {
-		flexGrow: 1,
-		paddingHorizontal: 24,
-		paddingTop: 16,
-		paddingBottom: 40,
-		gap: 16,
-	},
 	titleArea: { alignItems: 'center', gap: 4 },
-	title: { fontSize: 28, fontWeight: '700', color: COLORS.fg },
-	subtitle: { fontSize: 14, color: COLORS.gray },
 	winnerWrapper: { position: 'relative' },
 	winnerShadow: {
 		position: 'absolute',

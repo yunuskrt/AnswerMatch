@@ -1,19 +1,16 @@
 import NeoButton from '@/components/NeoButton'
+import Text from '@/components/Text'
 import TimerRing from '@/components/TimerRing'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
+import { globalStyles } from '@/styles/global'
 import { emitSubmitMatches } from '@/utils/callbacks'
 import { COLORS } from '@/utils/constants'
 import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import Text from '@/components/Text'
-import {
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Svg, { Line } from 'react-native-svg'
 
@@ -93,11 +90,11 @@ const MatchingPhase = ({}: Props) => {
 	const matchedCount = Object.keys(matches).length
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<View style={styles.container}>
 				{/* Header */}
 				<View style={styles.header}>
-					<Text style={styles.title}>Who said what?</Text>
+					<Text style={globalStyles.title}>Who said what?</Text>
 					<TimerRing
 						seconds={timeLeft}
 						totalSeconds={30}
@@ -237,7 +234,6 @@ const MatchingPhase = ({}: Props) => {
 export default MatchingPhase
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
 	container: {
 		flex: 1,
 		paddingHorizontal: 20,
@@ -250,7 +246,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	title: { fontSize: 24, fontWeight: '700', color: COLORS.fg },
 	hint: { fontSize: 13, color: COLORS.gray },
 	columns: {
 		flex: 1,

@@ -1,15 +1,16 @@
 import NeoButton from '@/components/NeoButton'
 import SectionLabel from '@/components/SectionLabel'
+import Text from '@/components/Text'
 import TimerRing from '@/components/TimerRing'
 import { useSocket } from '@/hooks/useSocket'
 import { useGameStore } from '@/store/useGameStore'
 import { useRoomStore } from '@/store/useRoomStore'
+import { globalStyles } from '@/styles/global'
 import { emitSubmitAnswer } from '@/utils/callbacks'
 import { COLORS } from '@/utils/constants'
 import { getInitial, getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import Text from '@/components/Text'
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -81,7 +82,7 @@ const AnswerPhase = ({}: Props) => {
 				]
 
 	return (
-		<SafeAreaView style={styles.safe}>
+		<SafeAreaView style={globalStyles.safe}>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
 				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -200,7 +201,6 @@ const AnswerPhase = ({}: Props) => {
 export default AnswerPhase
 
 const styles = StyleSheet.create({
-	safe: { flex: 1, backgroundColor: COLORS.bg },
 	scroll: {
 		flexGrow: 1,
 		paddingHorizontal: 24,
