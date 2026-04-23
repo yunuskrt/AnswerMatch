@@ -1,6 +1,6 @@
+import CustomText from '@/components/Text'
 import { COLORS } from '@/utils/constants'
 import React from 'react'
-import Text from '@/components/Text'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 type Props = {
@@ -17,7 +17,7 @@ const NeoButton = ({ label, bg, onPress }: Props) => {
                 onPress={onPress}
                 activeOpacity={0.85}
             >
-                <Text style={styles.label}>{label}</Text>
+                <CustomText style={styles.label} numberOfLines={1}>{label}</CustomText>
             </TouchableOpacity>
     </View>
   )
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		position: 'relative',
 		width: '100%',
-		height: 48,
+		height: 52,
 	},
 	shadow: {
 		position: 'absolute',
@@ -52,8 +52,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	label: {
-		fontSize: 18,
+		fontSize: 17,
 		fontWeight: '700',
 		color: COLORS.white,
+		lineHeight: 17,
+		includeFontPadding: false,
+		textAlignVertical: 'center',
 	},
 })

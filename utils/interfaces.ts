@@ -15,7 +15,7 @@ interface Player {
 	username: string
 }
 
-interface GameHistoryEntry {
+export interface GameHistoryEntry {
 	roomId: string
 	placement: string
 	date: string
