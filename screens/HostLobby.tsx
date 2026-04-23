@@ -1,6 +1,8 @@
 import Avatar from '@/components/Avatar'
 import BorderlessNeoButton from '@/components/BorderlessNeoButton'
 import SectionLabel from '@/components/SectionLabel'
+import ShareRoomHint from '@/components/ShareRoomHint'
+import Text from '@/components/Text'
 import { useSocket } from '@/hooks/useSocket'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
@@ -9,12 +11,7 @@ import { COLORS } from '@/utils/constants'
 import { getPlayerColor } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import Text from '@/components/Text'
-import {
-	ScrollView,
-	StyleSheet,
-	View
-} from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {}
@@ -72,11 +69,7 @@ const HostLobby = ({}: Props) => {
 					</View>
 				</View>
 
-				{/* Share hint */}
-				<View style={styles.shareHint}>
-					<Text style={styles.shareIcon}>📋</Text>
-					<Text style={styles.shareText}>Share room ID with friends</Text>
-				</View>
+				<ShareRoomHint roomId={roomId!} />
 
 				<SectionLabel text={`Players (${displayPlayers.length}/10)`} />
 
@@ -161,19 +154,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 4,
 	},
 	countText: { fontSize: 13, color: COLORS.fg },
-	shareHint: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 8,
-		backgroundColor: COLORS.accent + '22',
-		borderWidth: 1.5,
-		borderColor: COLORS.accent,
-		borderStyle: 'dashed',
-		borderRadius: 10,
-		padding: 10,
-	},
-	shareIcon: { fontSize: 18 },
-	shareText: { fontSize: 14, color: COLORS.fg },
 	playerList: { gap: 8 },
 	playerRow: {
 		flexDirection: 'row',
