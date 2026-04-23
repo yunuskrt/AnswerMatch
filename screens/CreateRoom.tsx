@@ -1,21 +1,29 @@
 import Chip from '@/components/Chip'
 import NeoButton from '@/components/NeoButton'
+import RoomPreviewCard from '@/components/RoomPreviewCard'
 import SectionLabel from '@/components/SectionLabel'
-import Tag from '@/components/Tag'
+import Text from '@/components/Text'
 import { useRoomStore } from '@/store/useRoomStore'
 import { useUserStore } from '@/store/useUserStore'
-import { COLORS, DURATION_OPTIONS, MAX_CAPACITY, MIN_CAPACITY, ROUND_OPTIONS } from '@/utils/constants'
+import { COLORS, DURATION_OPTIONS, MAX_CAPACITY, MIN_CAPACITY } from '@/utils/constants'
 import { generateRoomId } from '@/utils/helpers'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
-import Text from '@/components/Text'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
+	LayoutChangeEvent,
+	PanResponder,
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
+const THUMB_SIZE = 22
+const TRACK_HEIGHT = 8
+const TOUCH_HEIGHT = 36
+const TRACK_TOP = (TOUCH_HEIGHT - TRACK_HEIGHT) / 2
+const THUMB_TOP = (TOUCH_HEIGHT - THUMB_SIZE) / 2
 
 type Props = {}
 const CreateRoom = ({}: Props) => {
@@ -27,6 +35,52 @@ const CreateRoom = ({}: Props) => {
 	const [duration, setDuration] = useState(settings.roundDuration)
 	const [rounds, setRounds] = useState(settings.rounds)
 	const [roomId] = useState(generateRoomId())
+	const [trackWidth, setTrackWidth] = useState(0)
+
+	const sliderRef = useRef<View>(null)
+	const trackWidthRef = useRef(0)
+	const trackPageXRef = useRef(0)
+
+	const roundOptions = useMemo(
+		() => [capacity, capacity * 2, capacity * 3],
+		[capacity],
+	)
+
+	useEffect(() => {
+		setRounds((prev) => {
+			const opts = [capacity, capacity * 2, capacity * 3]
+			return opts.includes(prev) ? prev : capacity
+		})
+	}, [capacity])
+
+	function updateCapacityFromX(x: number) {
+		const clamped = Math.max(0, Math.min(x, trackWidthRef.current))
+		const pct = trackWidthRef.current > 0 ? clamped / trackWidthRef.current : 0
+		const raw = MIN_CAPACITY + pct * (MAX_CAPACITY - MIN_CAPACITY)
+		setCapacity(Math.round(raw))
+	}
+
+	const panResponder = useRef(
+		PanResponder.create({
+			onStartShouldSetPanResponder: () => true,
+			onMoveShouldSetPanResponder: () => true,
+			onPanResponderGrant: (evt) => {
+				updateCapacityFromX(evt.nativeEvent.pageX - trackPageXRef.current)
+			},
+			onPanResponderMove: (evt) => {
+				updateCapacityFromX(evt.nativeEvent.pageX - trackPageXRef.current)
+			},
+		}),
+	).current
+
+	function handleSliderLayout(e: LayoutChangeEvent) {
+		const w = e.nativeEvent.layout.width
+		setTrackWidth(w)
+		trackWidthRef.current = w
+		sliderRef.current?.measure((_x, _y, _w, _h, pageX) => {
+			trackPageXRef.current = pageX
+		})
+	}
 
 	function handleCreate() {
 		setSettings({ minCapacity: capacity, roundDuration: duration, rounds })
@@ -36,6 +90,16 @@ const CreateRoom = ({}: Props) => {
 
 	const sliderPct =
 		((capacity - MIN_CAPACITY) / (MAX_CAPACITY - MIN_CAPACITY)) * 100
+	const thumbLeft =
+		trackWidth > 0
+			? Math.max(
+					0,
+					Math.min(
+						(sliderPct / 100) * trackWidth - THUMB_SIZE / 2,
+						trackWidth - THUMB_SIZE,
+					),
+				)
+			: 0
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -54,14 +118,15 @@ const CreateRoom = ({}: Props) => {
 						text={`Min. capacity  (${MIN_CAPACITY}–${MAX_CAPACITY})`}
 					/>
 					<View style={styles.sliderRow}>
-						<View style={styles.sliderTrack}>
+						<View
+							ref={sliderRef}
+							style={styles.sliderTouch}
+							onLayout={handleSliderLayout}
+							{...panResponder.panHandlers}
+						>
+							<View style={styles.sliderTrackBg} />
 							<View style={[styles.sliderFill, { width: `${sliderPct}%` }]} />
-							<View
-								style={[
-									styles.sliderThumb,
-									{ left: `${Math.max(0, sliderPct - 3)}%` },
-								]}
-							/>
+							<View style={[styles.sliderThumb, { left: thumbLeft }]} />
 						</View>
 						<View style={styles.capacityBox}>
 							<Text style={styles.capacityNum}>{capacity}</Text>
@@ -104,7 +169,7 @@ const CreateRoom = ({}: Props) => {
 				<View style={styles.section}>
 					<SectionLabel text='Number of rounds' />
 					<View style={styles.chipRow}>
-						{ROUND_OPTIONS.map((n) => (
+						{roundOptions.map((n) => (
 							<Chip
 								key={n}
 								label={String(n)}
@@ -117,20 +182,12 @@ const CreateRoom = ({}: Props) => {
 				</View>
 
 				{/* Room preview card */}
-				<View style={styles.cardWrapper}>
-					<View style={styles.cardShadow} />
-					<View style={styles.card}>
-						<View style={styles.cardHeader}>
-							<Text style={styles.cardLabel}>Room ID</Text>
-							<Text style={styles.cardRoomId}>#{roomId}</Text>
-						</View>
-						<View style={styles.tagRow}>
-							<Tag label={`${capacity} players`} color={COLORS.accent} />
-							<Tag label={`${rounds} rounds`} color={COLORS.accent3} />
-							<Tag label={`${duration}s`} color={COLORS.accent2} />
-						</View>
-					</View>
-				</View>
+				<RoomPreviewCard
+					roomId={roomId}
+					capacity={capacity}
+					rounds={rounds}
+					duration={duration}
+				/>
 
 				<View style={styles.btnWrapper}>
 					<NeoButton
@@ -164,31 +221,36 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		gap: 12,
 	},
-	sliderTrack: {
+	sliderTouch: {
 		flex: 1,
-		height: 8,
+		height: TOUCH_HEIGHT,
+	},
+	sliderTrackBg: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: TRACK_TOP,
+		height: TRACK_HEIGHT,
 		backgroundColor: COLORS.lightGray,
 		borderRadius: 4,
-		position: 'relative',
-		justifyContent: 'center',
 	},
 	sliderFill: {
 		position: 'absolute',
 		left: 0,
-		top: 0,
-		height: '100%',
+		top: TRACK_TOP,
+		height: TRACK_HEIGHT,
 		backgroundColor: COLORS.accent,
 		borderRadius: 4,
 	},
 	sliderThumb: {
 		position: 'absolute',
-		width: 20,
-		height: 20,
+		top: THUMB_TOP,
+		width: THUMB_SIZE,
+		height: THUMB_SIZE,
 		backgroundColor: COLORS.white,
 		borderWidth: 2.5,
 		borderColor: COLORS.border,
-		borderRadius: 10,
-		top: -6,
+		borderRadius: THUMB_SIZE / 2,
 	},
 	capacityBox: {
 		width: 44,
@@ -219,39 +281,5 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		gap: 10,
 	},
-	cardWrapper: {
-		position: 'relative',
-		marginTop: 4,
-	},
-	cardShadow: {
-		position: 'absolute',
-		top: 4,
-		left: 4,
-		right: -4,
-		bottom: -4,
-		borderRadius: 12,
-		backgroundColor: COLORS.border,
-	},
-	card: {
-		backgroundColor: COLORS.white,
-		borderWidth: 2,
-		borderColor: COLORS.border,
-		borderRadius: 12,
-		padding: 14,
-		gap: 8,
-	},
-	cardHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-	cardLabel: { fontSize: 14, color: COLORS.gray },
-	cardRoomId: {
-		fontSize: 24,
-		fontWeight: '700',
-		color: COLORS.accent,
-		letterSpacing: 2,
-	},
-	tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
 	btnWrapper: { marginTop: 8 },
 })
