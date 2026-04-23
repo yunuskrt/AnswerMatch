@@ -1,54 +1,41 @@
+import CopyButton from '@/components/CopyButton'
+import Tag from '@/components/Tag'
 import { COLORS } from '@/utils/constants'
-import { Ionicons } from '@expo/vector-icons'
-import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Tag from './Tag'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 type Props = {
-  roomId: string
-  capacity: number
-  rounds: number
-  duration: number
+	roomId: string
+	capacity: number
+	rounds: number
+	duration: number
 }
 const RoomPreviewCard = ({ roomId, capacity, rounds, duration }: Props) => {
-  const [copied, setCopied] = useState(false)
-  function handleCopy(){
-    setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 1500)
-  }
-  return (
-    <View style={styles.cardWrapper}>
-      <View style={styles.cardShadow} />
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardLabel}>Room ID</Text>
-          <View style={styles.cardRoomIdRow}>
-            <Text style={styles.cardRoomId}>#{roomId}</Text>
-            <TouchableOpacity onPress={handleCopy} style={styles.copyBtn}>
-              <Ionicons
-                name={copied ? 'checkmark' : 'copy-outline'}
-                size={20}
-                color={copied ? COLORS.green : COLORS.gray}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.tagRow}>
-          <Tag label={`${capacity} players`} color={COLORS.accent} />
-          <Tag label={`${rounds} rounds`} color={COLORS.accent3} />
-          <Tag label={`${duration}s`} color={COLORS.accent2} />
-        </View>
-      </View>
-    </View>
-  )
+	return (
+		<View style={styles.cardWrapper}>
+			<View style={styles.cardShadow} />
+			<View style={styles.card}>
+				<View style={styles.cardHeader}>
+					<Text style={styles.cardLabel}>Room ID</Text>
+					<View style={styles.cardRoomIdRow}>
+						<Text style={styles.cardRoomId}>#{roomId}</Text>
+						<CopyButton roomId={roomId} />
+					</View>
+				</View>
+				<View style={styles.tagRow}>
+					<Tag label={`${capacity} players`} color={COLORS.accent} />
+					<Tag label={`${rounds} rounds`} color={COLORS.accent3} />
+					<Tag label={`${duration}s`} color={COLORS.accent2} />
+				</View>
+			</View>
+		</View>
+	)
 }
 
 export default RoomPreviewCard
 
 const styles = StyleSheet.create({
-  cardWrapper: {
+	cardWrapper: {
 		position: 'relative',
 		marginTop: 4,
 	},
@@ -86,6 +73,5 @@ const styles = StyleSheet.create({
 		color: COLORS.accent,
 		letterSpacing: 2,
 	},
-	copyBtn: { padding: 4 },
 	tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
 })
